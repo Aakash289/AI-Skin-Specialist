@@ -2,7 +2,7 @@
 
 AI Skin Specialist is a Gradio-based consultation assistant. A patient records a spoken description of their skin concern and uploads either a photo or a short video of the affected area. The app transcribes the patient's voice, sends the description together with the image (or video frames) to Claude, and returns both a written and a spoken doctor-style response.
 
-This project is built on an original open-source template that used Groq and MiniMax. It has been rewired to use Claude as the core reasoning and vision model, with proper image and video support, and cleaned-up dependency handling through uv.
+This version uses Claude as the core reasoning and vision model, with support for either an image or a video as visual input, and dependency management handled through uv.
 
 Important: this project provides general informational guidance only. It is not a medical diagnosis and should not replace care from a licensed dermatologist or clinician.
 
@@ -13,15 +13,15 @@ Important: this project provides general informational guidance only. It is not 
 - Deepgram converts that text response into an audio file that plays back automatically in the browser.
 - Gradio ties all of this together into a single web page: record voice, upload image or video, click Analyze, get a transcript, a written response, and a spoken response.
 
-Unlike the original template, this version does not require an image specifically. A user can submit either an image or a video, and the app picks whichever one was provided. Claude has no native video understanding, so when a video is submitted, the app extracts several evenly spaced frames from it using OpenCV and sends those frames to Claude as a set of images instead. From the user's perspective, video "just works", even though under the hood it is being converted to frames first.
+This app does not require an image specifically. A user can submit either an image or a video, and the app picks whichever one was provided. Claude has no native video understanding, so when a video is submitted, the app extracts several evenly spaced frames from it using OpenCV and sends those frames to Claude as a set of images instead. From the user's perspective, video "just works", even though under the hood it is being converted to frames first.
 
 ## Tools and services used
 
 **Gradio** renders the web interface: the input card (voice, image, video, submit button) and the output card (transcript, written response, audio player). Custom CSS is used throughout `main.py` to give the interface its own visual identity instead of Gradio's default theme.
 
-**Anthropic (Claude)** is the model that actually reasons about the patient's description and their skin photo or video frames, and writes the short doctor-style reply. This replaces the original template's use of Groq's vision model for this step.
+**Anthropic (Claude)** is the model that actually reasons about the patient's description and their skin photo or video frames, and writes the short doctor-style reply.
 
-**Groq (Whisper)** is used only for speech-to-text: converting the patient's recorded microphone audio into a text transcript. This part of the original template was kept as-is, since Groq's Whisper endpoint is fast and inexpensive for transcription specifically.
+**Groq (Whisper)** is used only for speech-to-text: converting the patient's recorded microphone audio into a text transcript. Groq's Whisper endpoint is fast and inexpensive for transcription specifically.
 
 **Deepgram** handles text-to-speech: turning the doctor's written response into a spoken MP3 so the user hears a reply rather than only reading one.
 
@@ -278,7 +278,7 @@ source .venv/bin/activate
 
 ## Development notes
 
-- `main.py` imports `brain_of_the_doctor` from `Brain_of_the_doctor.py`. There is only one implementation of the doctor logic in this version of the project, unlike the original template which had a separate Groq-only path.
+- `main.py` imports `brain_of_the_doctor` from `Brain_of_the_doctor.py`, the single implementation of the doctor logic used by the app.
 - Claude does not accept video as a native input type. Video support works by extracting frames with OpenCV and sending them as multiple images in a single request, not by sending the raw video file.
 - If `video_filepath` is provided, it takes priority over `image_filepath` inside `brain_of_the_doctor()`. If a user somehow submits both, the video is used and the image is ignored.
 - Generated doctor audio is written to `doctor_response.mp3` by default.
