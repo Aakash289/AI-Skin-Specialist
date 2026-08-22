@@ -111,52 +111,6 @@ Using Chocolatey, from an Administrator PowerShell:
 choco install ffmpeg
 ```
 
-PortAudio itself is not needed as a separate Chocolatey package on Windows. `pip install pyaudio` (or `uv add pyaudio`) uses a precompiled wheel on Windows that already bundles PortAudio, so no separate system install is required.
-
-Verify FFmpeg:
-
-```
-ffmpeg -version
-```
-
-Restart your terminal after installing FFmpeg so the updated PATH is picked up by new sessions. If `choco` itself is not recognized, install Chocolatey first from an Administrator PowerShell window, following the instructions at https://chocolatey.org/install.
-
-### macOS
-
-Using Homebrew:
-
-```
-brew update
-brew install ffmpeg portaudio
-```
-
-Verify:
-
-```
-ffmpeg -version
-brew list portaudio
-```
-
-### Linux
-
-Ubuntu/Debian:
-
-```
-sudo apt update
-sudo apt install ffmpeg portaudio19-dev python3-dev build-essential
-```
-
-Fedora:
-
-```
-sudo dnf install ffmpeg portaudio-devel python3-devel gcc gcc-c++ make
-```
-
-Arch:
-
-```
-sudo pacman -S ffmpeg portaudio base-devel
-```
 
 ## Install uv
 
@@ -166,17 +120,6 @@ Windows, in PowerShell:
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-macOS/Linux:
-
-```
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-Restart your terminal, then verify:
-
-```
-uv --version
-```
 
 ## Setup
 
@@ -197,10 +140,6 @@ CLAUDE_API_KEY=your_anthropic_api_key_here
 GROQ_API_KEY=your_groq_api_key_here
 DEEPGRAM_API_KEY=your_deepgram_api_key_here
 
-# Optional model overrides
-CLAUDE_MODEL=claude-sonnet-5
-WHISPER_MODEL=whisper-large-v3
-DEEPGRAM_TTS_MODEL=aura-2-thalia-en
 ```
 
 All three keys are required for the app to run end to end: `CLAUDE_API_KEY` for the doctor's reasoning and vision, `GROQ_API_KEY` for voice transcription, and `DEEPGRAM_API_KEY` for the spoken response. Do not commit `.env` or real API keys to version control.
